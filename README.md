@@ -1,8 +1,15 @@
+
 Description
 ===========
 
 Installs and configures Jenkins CI server & node slaves. Resource providers to 
 support automation via jenkins-cli, including job create/update.
+
+Plugin installation, customs jobs for Kaiser.
+
+run_list
+* recipe[jenkins::server_2]
+* recipe[install_plugins]
 
 Requirements
 ============
