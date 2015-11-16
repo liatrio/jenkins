@@ -1,13 +1,13 @@
-jenkins Cookbook
-================
-[![Build Status](http://img.shields.io/travis/chef-cookbooks/jenkins.svg)][travis]
 
+Description
+===========
 
-[travis]: http://travis-ci.org/chef-cookbooks/jenkins
+_vp_ 20151116
 
-Installs and configures Jenkins CI master & node slaves. Resource providers to support automation via jenkins-cli, including job create/update.
+run_list
+* recipe[jenkins::install_server]
+* recipe[jenkins::install_plugins]
 
-This project is managed by the CHEF Release Engineering team. For more information on the Release Engineering team's contribution, triage, and release process, please consult the [CHEF Release Engineering OSS Management Guide](https://docs.google.com/a/chef.io/document/d/1oJB0vZb_3bl7_ZU2YMDBkMFdL-EWplW1BJv_FXTUOzg/edit).
 
 Requirements
 ------------
