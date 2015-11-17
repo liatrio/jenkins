@@ -33,7 +33,7 @@ end
 node[:jenkins][:plugins_list].each do |plugin_name|
   remote_file "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" do
     source "#{node[:jenkins][:plugins_site]}/#{plugin_name}.hpi"
-    # not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
+    not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
   end
 end
 
@@ -45,6 +45,7 @@ template '/var/lib/jenkins/hudson.tasks.Maven.xml' do
 end
 
 execute "curl http://#{node[:jenkins][:ip]}/safeRestart -X POST -i && sleep #{node[:jenkins][:sleep_interval]}"
+sleep node[:jenkins][:sleep_interval]
 
 directory "/var/lib/jenkins/.m2" do
   action :create

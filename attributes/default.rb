@@ -26,7 +26,7 @@
 default[:jenkins][:user]             = 'jenkins'
 default[:jenkins][:group]            = 'jenkins'
 default[:jenkins][:ip]               = "127.0.0.1:8080"
-default[:jenkins][:sleep_interval]   = 8
+default[:jenkins][:sleep_interval]   = 16
 default[:jenkins][:plugins_dir]      = "/var/lib/jenkins/plugins"
 default[:jenkins][:plugins_site]     = "http://updates.jenkins-ci.org/download/plugins"
 default[:jenkins][:plugins_site]     = "https://updates.jenkins-ci.org/latest/" # +"git.hpi"
