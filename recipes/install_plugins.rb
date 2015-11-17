@@ -21,7 +21,7 @@ execute "wget http://#{node[:jenkins][:ip]}/jnlpJars/jenkins-cli.jar" do
   not_if { ::File.exists?('/opt/jenkins-cli.jar') }
 end
 
-directory plugins_dir do
+directory node[:jenkins][:plugins_dir] do
   action :create
   recursive true
   owner node[:jenkins][:user]
