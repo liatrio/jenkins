@@ -7,7 +7,8 @@ _vp_ 20151116
 <pre>
 run_list = [
   "recipe[jenkins::install_server]",
-  "recipe[jenkins::install_plugins]"
+  "recipe[jenkins::install_plugins]",
+  "recipe[jenkins::create_job]"
 ]
 </pre>
 

@@ -29,7 +29,7 @@ directory node[:jenkins][:plugins_dir] do
   mode '0755'
 end
 
-plugins_list.each do |plugin_name|
+node[:jenkins][:plugins_list].each do |plugin_name|
   remote_file "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" do
     source "#{node[:jenkins][:plugins_site]}/#{plugin_name}.hpi"
     not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
