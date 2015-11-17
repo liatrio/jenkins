@@ -7,21 +7,65 @@
 # From: http://stackoverflow.com/questions/7709993/how-can-i-update-jenkins-plugins-from-the-terminal
 #
 
-plugins_dir  = "/var/lib/jenkins/plugins"
-plugins_site = "http://updates.jenkins-ci.org/download/plugins"
-plugins_site = "https://updates.jenkins-ci.org/latest/" # +"git.hpi"
-jenkins_ip   = "192.168.56.31:8080"
-plugins_list = %w( git git-client build-pipeline-plugin authorize-project )
 
+user node[:jenkins][:user] do
+  action :create
+end
 
-plugins_list.each do |plugin_name|
-  remote_file "#{plugins_dir}/#{plugin_name}.hpi" do
-    source "#{plugins_site}/#{plugin_name}.hpi"
+group node[:jenkins][:group] do
+  action :create
+end
+
+execute "wget http://#{node[:jenkins][:ip]}/jnlpJars/jenkins-cli.jar" do
+  cwd "/opt"
+  not_if { ::File.exists?('/opt/jenkins-cli.jar') }
+end
+
+directory node[:jenkins][:plugins_dir] do
+  action :create
+  recursive true
+  owner node[:jenkins][:user]
+  group node[:jenkins][:group]
+  mode '0755'
+  not_if { ::File.exists?( node[:jenkins][:plugins_dir] ) }
+end
+
+node[:jenkins][:plugins_list].each do |plugin_name|
+  remote_file "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" do
+    source "#{node[:jenkins][:plugins_site]}/#{plugin_name}.hpi"
+    not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
   end
 end
 
-execute "curl http://#{jenkins_ip}/safeRestart -X POST -i"
+# link maven
+template '/var/lib/jenkins/hudson.tasks.Maven.xml' do
+  source   'var/lib/jenkins/hudson.tasks.Maven.xml.erb'
+  mode     '0755'
+  variables({})
+end
 
-# wget http://192.168.56.31:8080/jnlpJars/jenkins-cli.jar
+execute "curl http://#{node[:jenkins][:ip]}/safeRestart -X POST -i && sleep #{node[:jenkins][:sleep_interval]}"
+sleep node[:jenkins][:sleep_interval]
 
-# https://updates.jenkins-ci.org/download/plugins/authorize-project/
+directory "/var/lib/jenkins/.m2" do
+  action :create
+  recursive true
+  owner node[:jenkins][:user]
+  group node[:jenkins][:group]
+  mode '0755'
+end
+
+template '/etc/maven/settings.xml' do
+  source   'etc/maven/settings.xml.erb'
+  mode     '0755'
+  variables({})
+end
+
+
+
+
+
+
+
+
+

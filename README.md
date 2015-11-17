@@ -4,10 +4,13 @@ Description
 
 _vp_ 20151116
 
-run_list
-* recipe[jenkins::install_server]
-* recipe[jenkins::install_plugins]
-
+<pre>
+run_list = [
+  "recipe[jenkins::install_server]",
+  "recipe[jenkins::install_plugins]",
+  "recipe[jenkins::create_job]"
+]
+</pre>
 
 Requirements
 ------------
