@@ -27,18 +27,38 @@ directory node[:jenkins][:plugins_dir] do
   owner node[:jenkins][:user]
   group node[:jenkins][:group]
   mode '0755'
+  not_if { ::File.exists?( node[:jenkins][:plugins_dir] ) }
 end
 
 node[:jenkins][:plugins_list].each do |plugin_name|
   remote_file "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" do
     source "#{node[:jenkins][:plugins_site]}/#{plugin_name}.hpi"
-    not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
+    # not_if { ::File.exists?( "#{node[:jenkins][:plugins_dir]}/#{plugin_name}.hpi" ) }
   end
 end
 
-execute "curl http://#{node[:jenkins][:ip]}/safeRestart -X POST -i" # " && sleep #{node[:jenkins][:sleep_interval]}"
+# link maven
+template '/var/lib/jenkins/hudson.tasks.Maven.xml' do
+  source   'var/lib/jenkins/hudson.tasks.Maven.xml.erb'
+  mode     '0755'
+  variables({})
+end
 
+execute "curl http://#{node[:jenkins][:ip]}/safeRestart -X POST -i && sleep #{node[:jenkins][:sleep_interval]}"
 
+directory "/var/lib/jenkins/.m2" do
+  action :create
+  recursive true
+  owner node[:jenkins][:user]
+  group node[:jenkins][:group]
+  mode '0755'
+end
+
+template '/etc/maven/settings.xml' do
+  source   'etc/maven/settings.xml.erb'
+  mode     '0755'
+  variables({})
+end
 
 
 

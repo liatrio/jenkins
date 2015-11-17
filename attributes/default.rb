@@ -30,10 +30,14 @@ default[:jenkins][:sleep_interval]   = 8
 default[:jenkins][:plugins_dir]      = "/var/lib/jenkins/plugins"
 default[:jenkins][:plugins_site]     = "http://updates.jenkins-ci.org/download/plugins"
 default[:jenkins][:plugins_site]     = "https://updates.jenkins-ci.org/latest/" # +"git.hpi"
-default[:jenkins][:plugins_list]     = %w( git git-client build-pipeline-plugin authorize-project repository-connector )
 default[:jenkins][:nexus_repo]       = "nexus.local"
 default[:jenkins][:job_name]         = "petclinic-auto-1"
-
+default[:jenkins][:plugins_list]     = %w( 
+  credentials ssh-credentials mailer scm-api git git-client
+  build-pipeline-plugin 
+  authorize-project
+  repository-connector 
+)
 
 default['jenkins'].tap do |jenkins|
   #
